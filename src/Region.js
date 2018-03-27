@@ -9,10 +9,26 @@ class Region extends Component {
 
     	return (
 			<div className={"region region" }>
-				<Round region={this.props.region} round={5} matchups={new Array(8).fill(0)}/>
-				<Round region={this.props.region} round={4} matchups={new Array(4).fill(0)}/>
-				<Round region={this.props.region} round={3} matchups={new Array(2).fill(0)}/>
-				<Round region={this.props.region} round={2} matchups={new Array(1).fill(0)}/>
+				<Round 
+					region={this.props.region} 
+					round={5}
+					teamClicked={this.props.teamClicked}
+				/>
+				<Round 
+					region={this.props.region} 
+					round={4}
+					teamClicked={this.props.teamClicked}
+				/>				
+				<Round 
+					region={this.props.region} 
+					round={3}
+					teamClicked={this.props.teamClicked}
+				/>				
+				<Round 
+					region={this.props.region} 
+					round={2}
+					teamClicked={this.props.teamClicked}
+				/>					
 			</div>
 		);
 	}

@@ -11,10 +11,8 @@ class Round extends Component {
   	})
   }
   handleEvent(){
-    console.log(this.props);
   }
   bracketPositionId(index) {
-    console.log(this.props.region,this.props.round, this.matchesInRound(),'a',index, this.regionOffset());
     return (this.getRound()).toString() + (1+index + this.regionOffset()).toString().padStart(2,'0')
   }
 
@@ -22,7 +20,10 @@ class Round extends Component {
     return Math.abs(7-this.props.round)
   }
   matchesInRound() {
-    return 2**this.props.round / 4 // 4 regions
+    if (this.props.round > 1) {
+      return 2**this.props.round / 4 // 4 regions
+    } 
+    return 1;
   }
   regionOffset() {
     return this.matchesInRound()*this.props.region
@@ -31,9 +32,8 @@ class Round extends Component {
 
 	return(	<div className={"round round" + this.props.round}>
 			
-				{new Array(this.matchesInRound()).fill(0).map((matchup, i) => <Matchup game={ this.state.games[this.bracketPositionId(i)]} />)}
+				{new Array(this.matchesInRound()).fill(0).map((matchup, i) => <Matchup key={i.toString()}round={this.props.round} className={"match_id" + i } match_id={i+2**(this.props.round) + this.regionOffset()  } teamClicked={this.props.teamClicked}/>)}
 					
-			
 						
 		</div>);
 	}

@@ -11,7 +11,8 @@ html, body {
 }
 
 .bracket{
-  width: 80%;
+  width: 95%;
+  margin: 0 auto ;
   display: flex;
   flex-direction: column;
 }
@@ -47,10 +48,15 @@ flex-grow:.25;
   font-size: 12px;
   margin: 2px 0;
   padding: 4px;
+  text-align: left;
 /*    min-width:80px; */
 }
+.team img {
+  width:16px;
+  height: 16px;
+}
 
-.reverse .team {
+.region:nth-of-type(3) .team {
     text-align: right;
 
 } .round5 .team {
