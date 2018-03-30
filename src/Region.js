@@ -1,36 +1,24 @@
 import React, { Component }  from 'react';
 import Round from './Round.js'
 class Region extends Component {
-  	constructor(props) {
-    	super(props);
+    renderRound(i) {
+      return <Round
+          region = {this.props.region}
+          round = {i}
+          teamClicked = {this.props.teamClicked}
+          picks = {this.props.picks}
+          master = {this.props.master}
+        />
     }
     render() {
-    	    	var rounds = new Array(4).fill(0);
-
-    	return (
-			<div className={"region region" }>
-				<Round 
-					region={this.props.region} 
-					round={5}
-					teamClicked={this.props.teamClicked}
-				/>
-				<Round 
-					region={this.props.region} 
-					round={4}
-					teamClicked={this.props.teamClicked}
-				/>				
-				<Round 
-					region={this.props.region} 
-					round={3}
-					teamClicked={this.props.teamClicked}
-				/>				
-				<Round 
-					region={this.props.region} 
-					round={2}
-					teamClicked={this.props.teamClicked}
-				/>					
-			</div>
-		);
-	}
+      return (
+      <div className={"region region"}>
+          {this.renderRound(5)}
+            {this.renderRound(4)}
+            {this.renderRound(3)}
+            {this.renderRound(2)}
+      </div>
+    );
+  }
 }
 export default Region

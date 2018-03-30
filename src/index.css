@@ -16,6 +16,15 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+.bracket_form {
+margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;
+position: absolute;
+width: 25%;
+padding: 20px;
+}
 .half{
   display: flex;
   flex:1;
@@ -51,6 +60,15 @@ flex-grow:.25;
   text-align: left;
 /*    min-width:80px; */
 }
+
+.team.wrong {
+  color: red;
+  text-decoration: line-through;
+}
+.team.correct {
+  color: green;
+}
+
 .team img {
   width:16px;
   height: 16px;
@@ -98,10 +116,10 @@ flex-grow:.25;
 .half .region:nth-of-type(2) {
   display:none;
 }
-.region:nth-of-type(1)  .round:nth-of-type(4) {
+.region:nth-of-type(1)  .round:nth-of-type(4) .matchup {
   transform: translateX(-50%);
 }
-.region:nth-of-type(3) .round:nth-of-type(4) {
+.region:nth-of-type(3) .round:nth-of-type(4) .matchup {
   transform: translateX(50%);
 }
 
