@@ -11,22 +11,25 @@ class Matchup extends Component {
   }
 
   render() {
+    var matchClass = " m" + this.props.match_id
     return (
-    <div className={"matchup"}>
+    <div className={"matchup" + matchClass}>
       <Team
         match_id = {this.props.match_id}
         slot_id = {this.getSlotId(this.props.match_id)}
         teamClicked = {this.props.teamClicked}
         pick = {this.props.picks ? this.props.picks[this.getSlotId(this.props.match_id)-1] : null}
-        master = {this.props.master ? this.props.master[this.getSlotId(this.props.match_id)-1] : null}
+        master_pick = {this.props.tournament.master ? this.props.tournament.master[this.getSlotId(this.props.match_id)-1] : null}
+        teams  = {this.props.tournament.teams}
+
       />
       <Team
         match_id = {this.props.match_id }
         slot_id = {this.getSlotId(this.props.match_id)+1}
         teamClicked = {this.props.teamClicked}
         pick = {this.props.picks ? this.props.picks[this.getSlotId(this.props.match_id)] : null}
-        master = {this.props.master ? this.props.master[this.getSlotId(this.props.match_id)] : null}
-
+        master_pick = {this.props.tournament.master ? this.props.tournament.master[this.getSlotId(this.props.match_id)] : null}
+        teams  = {this.props.tournament.teams}
       />
     </div>
     );

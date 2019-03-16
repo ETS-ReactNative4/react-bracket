@@ -30,7 +30,7 @@ class Round extends Component {
       match_id={i+2**(this.props.round) + this.regionOffset()}
       teamClicked={this.props.teamClicked}
       picks = {this.props.picks}
-      master  = {this.props.master}
+      tournament  = {this.props.tournament}
     />
   }
 

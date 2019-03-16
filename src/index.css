@@ -2,16 +2,32 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  line-height: 1;
 }
 
 html, body {
   width: 100%;
   font-family: sans-serif;
-  background-color: #bbb;
+  background-color: #FFF;
+}
+#root {
+  position: relative;
+}
+.error {
+  color: red;
+}
+.bracket.errored .not_picked{
+    background: #F9E5E6;
+    border: 1px solid #E8AAAD;
+    color: #B50007;
+}
+input.errored{
+    background: #F9E5E6;
+    border: 1px solid #E8AAAD;
+    color: #B50007;
 }
 
 .bracket{
-  width: 95%;
   margin: 0 auto ;
   display: flex;
   flex-direction: column;
@@ -32,11 +48,11 @@ padding: 20px;
 }
 
 .region {
-  display: flex; 
+  display: flex;
   flex:1;
 }
 .region.region-champ {
-flex-grow:.25; 
+flex-grow:.25;
 }
 
 .round {
@@ -53,12 +69,44 @@ flex-grow:.25;
   padding: 0px;
 }
 .team {
-  background-color: #dedede;
+  background-color: #fff;
+  border:solid 1px #eee;
   font-size: 12px;
-  margin: 2px 0;
-  padding: 4px;
+/*  margin: 2px 0;
+  padding: 4px;*/
   text-align: left;
 /*    min-width:80px; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.team.picked {
+  background-color: #eee;
+}
+
+.round4 .team.not_picked .team_logo,
+.round3 .team.not_picked .team_logo,
+.round2 .team.not_picked .team_logo,
+.round1 .team.not_picked .team_logo,
+.round0 .team.not_picked .team_logo,
+.final .team.not_picked .team_logo {
+ display: none
+}
+
+.team .team_logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+.team .team_logo img {
+  margin:;
+  width: 16px;
+  height: 16px;
+}
+.team .team_name {
+  padding: 4px;
 }
 
 .team.wrong {
@@ -91,16 +139,73 @@ flex-grow:.25;
   display:none;
 }
 /*test */
-.final-four {
+.final-four h3 {
+  display: none;
+}
+  .final-four {
+  font-size: 12px;
+  text-align: center;
+  border: solid 1px #efefef;
+  padding: 4px;
   display:flex;
   flex-direction: row;
   justify-content: center;
+  position: absolute;
+  top: 350px;
+  align-self: center;
+  align-items: center;
+  width: 37.5%;
+
+}
+.round0  {
+  width: 80%;
+}
+.final-four h4 {
+  margin: 0;
+}
+.final-four .championship  {
+  align-items: center;
+  flex: 1.6 1;
+  margin: 0 10px;
+  justify-content: center;
+}
+.final-four .champion  {
+  width: 100%;
+  font-size: 20px
 }
 
-.final-four .region {
+.final-four .champion .team  {
+  font-size: 20px
+}
+.final-four .champion img {
+  height: 32px;
+  width: 32px;
+}
+/*.final-four h3, .final-four h4 {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+
+.champion .team {
+  margin: 4px;
+  padding: 8px;
+}
+.final-four .champion .team {
+  font-size: 16px;
+  font-weight: 600;
+
+}
+
+.final-four .champion .team_logo {
+  height: 28px;
+  width: 28px;
+}*/
+
+/*.final-four .region {
   display: flex;
-  flex:.5;  
-  flex-direction: row;
+  flex:.5;
+  flex-direction: column;
   margin:0;
 }
 .final-four .round {
@@ -112,18 +217,25 @@ flex-grow:.25;
     flex:2;
   margin:10px 0;
 }
-
+*/
 .half .region:nth-of-type(2) {
-  display:none;
+  /*display:none;*/
 }
+.region:nth-of-type(1)  .round:nth-of-type(3) .matchup {
+  transform: translateX(-30%);
+}
+.region:nth-of-type(3) .round:nth-of-type(3) .matchup {
+  transform: translateX(30%);
+}
+
 .region:nth-of-type(1)  .round:nth-of-type(4) .matchup {
-  transform: translateX(-50%);
+  transform: translateX(-90%);
 }
 .region:nth-of-type(3) .round:nth-of-type(4) .matchup {
-  transform: translateX(50%);
+  transform: translateX(90%);
 }
 
-/* OVERRIDE 
+/* OVERRIDE
 .final-four {
   display: flex;
   flex: 0.25;
@@ -138,7 +250,7 @@ flex-grow:.25;
 }
 .final-four .round .matchup {
   flex:4;
-} 
+}
 .half  {
   flex-direction:row;
 }

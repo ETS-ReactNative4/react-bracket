@@ -7,7 +7,7 @@ class Region extends Component {
           round = {i}
           teamClicked = {this.props.teamClicked}
           picks = {this.props.picks}
-          master = {this.props.master}
+          tournament = {this.props.tournament}
         />
     }
     render() {
