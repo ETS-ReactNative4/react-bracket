@@ -22,8 +22,11 @@ class Bracket extends Component {
         master: Array(63).fill(0),
       }
           }
-    appInitData.tournament.master[0] = 1;
-    appInitData.bracket.picks = [2,2,59,2,27,33,59,2,11,23,27,33,45,53,59,2,8,11,14,17,23,27,31,33,39,43,45,49,53,59,63,2,4,6,8,9,11,14,16,17,19,22,23,26,27,30,31,33,35,37,39,41,43,45,47,49,52,53,55,58,59,62,63]
+    appInitData.bracket.errors = {};
+
+     // appInitData.bracket.picks = [2,2,59,2,27,33,59,2,11,23,27,33,45,53,59,2,8,11,14,17,23,27,31,33,39,43,45,49,53,59,63,2,4,6,8,9,11,14,16,17,19,22,23,26,27,30,31,33,35,37,39,41,43,45,47,49,52,53,55,58,59,62,63]
+    // appInitData.tournament.master[0] = 1;
+
     this.state = Object.assign({}, appInitData.bracket, { tournament: appInitData.tournament});
       // picks: [49, 31, 49, 11, 31, 46, 49, 1, 11, 22, 31, 36, 46, 49, 57, 3, 5, 11, 13, 18, 22, 27, 31, 36, 38, 43, 46, 49, 53, 57, 62, 1, 3, 5, 7, 9, 11, 13, 15, 18, 20, 22, 23, 25, 27, 29, 31, 34, 36, 38, 40, 41, 43, 46, 48, 49, 51, 53, 55, 57, 60, 62, 63]
   }
@@ -75,7 +78,13 @@ class Bracket extends Component {
         method: "POST",
         body: JSON.stringify(this.state),
         credentials: 'include'
-      });
+      }).then((resp) => resp.json()) // Transform the data into json
+        .then(
+        (data) => {
+          console.log(data)
+          this.setState(data.bracket)
+        }
+      )
     } else {
       console.log('err');
       this.setState({error:true})
