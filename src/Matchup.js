@@ -4,7 +4,7 @@ import Team from './Team.js'
 class Matchup extends Component {
 
   getSlotId(match_id) {
-    var round = Math.floor(Math.log2(this.props.match_id));
+    var round = Math.floor(Math.log2(match_id));
     var offset = 2**round;
     var bar = (match_id%offset)* 2 ;
     return bar + (offset * 2);

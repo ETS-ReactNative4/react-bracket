@@ -2,6 +2,8 @@ import React, { Component }  from 'react';
 import Region from './Region.js'
 import Matchup from './Matchup.js'
 import BracketForm from './BracketForm.js'
+
+import FlashMessage from './FlashMessage.js'
 import Team from './Team.js'
 import teamdata from './data/teams.json'
 class Bracket extends Component {
@@ -24,7 +26,7 @@ class Bracket extends Component {
           }
     appInitData.bracket.errors = {};
 
-     // appInitData.bracket.picks = [2,2,59,2,27,33,59,2,11,23,27,33,45,53,59,2,8,11,14,17,23,27,31,33,39,43,45,49,53,59,63,2,4,6,8,9,11,14,16,17,19,22,23,26,27,30,31,33,35,37,39,41,43,45,47,49,52,53,55,58,59,62,63]
+     appInitData.bracket.picks = [2,2,59,2,27,33,59,2,11,23,27,33,45,53,59,2,8,11,14,17,23,27,31,33,39,43,45,49,53,59,63,2,4,6,8,9,11,14,16,17,19,22,23,26,27,30,31,33,35,37,39,41,43,45,47,49,52,53,55,58,59,62,63]
     // appInitData.tournament.master[0] = 1;
 
     this.state = Object.assign({}, appInitData.bracket, { tournament: appInitData.tournament});
@@ -54,6 +56,12 @@ class Bracket extends Component {
     }
     this.setState({picks: picks});
   }
+  randomize() {
+      for (var i = 63; i >=0; i++){
+          var leadInMatchIds = this.getLeadInMatches(i)
+          var slot_id= Matchup.getSlotId(leadInMatchIds[0])
+      }
+  }
 
   validateBracket = () => {
     var errors = {};
@@ -74,6 +82,7 @@ class Bracket extends Component {
     if (this.validateBracket()) {
       var form = new FormData()
       form.append( "json", JSON.stringify( this.state.picks ) );
+      this.setState({canEdit:false});
       fetch("/brackets/react_update", {
         method: "POST",
         body: JSON.stringify(this.state),
@@ -82,9 +91,19 @@ class Bracket extends Component {
         .then(
         (data) => {
           console.log(data)
-          this.setState(data.bracket)
+          if (data.error) {
+              this.setState({canEdit:true, flash_message: {message:'Failed to save Bracket', type:'error'}})
+          } else {
+              this.setState({canEdit:true, flash_message: {message:'Bracket Saved', type:'success'}})
+              this.setState(data.bracket)
+
+          }
         }
-      )
+      ) .catch(error => {
+            this.setState({canEdit:true, flash_message: {message:'Failed to save Bracket', type:'error'}})
+
+    });
+
     } else {
       console.log('err');
       this.setState({error:true})
@@ -123,12 +142,36 @@ class Bracket extends Component {
     return  <input className={errored} type="number" size="3" defaultValue={this.state.final_points} disabled={!this.state.canEdit} onChange={this.setFinalPoints}/>
 
   }
+  renderFlash() {
+    if (this.state.flash_message) {
+      return  <FlashMessage timeout={this.hideFlash} flash_message={this.state.flash_message}/>
+    }
+  }
+
+  hideFlash = () =>  {
+    this.setState({flash_message: null})
+    return false;
+  }
+
+  renderHelp() {
+    var link = "/bracektes/add";
+    if (this.state.id && this.state.canEdit) {
+        link = "/brackets/edit/" + this.state.id
+    }
+
+    return <div><p>If you are experiencing trouble with the new layout try out the old form <a href={link}>Here</a>.</p> <p>Just click a team to advance.</p></div>
+  }
 
   render() {
         var errored = this.state.errors.picks ? 'errored' : ''
 
     return (
-      <div className={ "bracket "+ errored} >
+        <div>
+        {this.renderFlash()}
+        {this.renderHelp()}
+        <div className={ "bracket "+ errored} >
+
+
         <BracketForm bracket={this.state} onSubmit={this.trySubmit} setBracketName={this.setBracketName}/>
         <div className="half">
           {this.renderRegion(0)}
@@ -206,6 +249,7 @@ class Bracket extends Component {
           {this.renderRegion(3)}
         </div>
 
+    </div>
     </div>
   );}
 }
