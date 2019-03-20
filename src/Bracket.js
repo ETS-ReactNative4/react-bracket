@@ -3,6 +3,8 @@ import Region from './Region.js'
 import Matchup from './Matchup.js'
 import BracketForm from './BracketForm.js'
 
+import Helpers from './Helpers.js'
+
 import FlashMessage from './FlashMessage.js'
 import Team from './Team.js'
 import teamdata from './data/teams.json'
@@ -26,8 +28,10 @@ class Bracket extends Component {
           }
     appInitData.bracket.errors = {};
 
-     // appInitData.bracket.picks = [2,2,59,2,27,33,59,2,11,23,27,33,45,53,59,2,8,11,14,17,23,27,31,33,39,43,45,49,53,59,63,2,4,6,8,9,11,14,16,17,19,22,23,26,27,30,31,33,35,37,39,41,43,45,47,49,52,53,55,58,59,62,63]
-    // appInitData.tournament.master[0] = 1;
+      // appInitData.bracket.picks = [1,2,59,2,27,33,59,2,11,23,27,33,45,53,59,2,8,11,14,17,23,27,31,33,39,43,45,49,53,59,63,2,4,6,8,9,11,14,16,17,19,22,23,26,27,30,31,33,35,37,39,41,43,45,47,49,52,53,55,58,59,62,63]
+      // appInitData.bracket.name="foo";
+      // appInitData.bracket.final_points=1
+      // appInitData.tournament.master[0] = 1;
 
     this.state = Object.assign({}, appInitData.bracket, { tournament: appInitData.tournament});
       // picks: [49, 31, 49, 11, 31, 46, 49, 1, 11, 22, 31, 36, 46, 49, 57, 3, 5, 11, 13, 18, 22, 27, 31, 36, 38, 43, 46, 49, 53, 57, 62, 1, 3, 5, 7, 9, 11, 13, 15, 18, 20, 22, 23, 25, 27, 29, 31, 34, 36, 38, 40, 41, 43, 46, 48, 49, 51, 53, 55, 57, 60, 62, 63]
@@ -56,23 +60,54 @@ class Bracket extends Component {
     }
     this.setState({picks: picks});
   }
-  randomize() {
-      for (var i = 63; i >=0; i++){
-          var leadInMatchIds = this.getLeadInMatches(i)
-          var slot_id= Matchup.getSlotId(leadInMatchIds[0])
+
+
+  validatePicks = () =>{
+      for (var i = 62; i >=0; i--){
+           // this.getPreviousPicks(i)
+
+            var match_id = i+1
+          var leadInMatchIds = this.getLeadInMatches(match_id)
+          var slot_id_1 =leadInMatchIds[0]-1
+              var slot_id_2 =leadInMatchIds[1]-1
+          var team_a = this.state.picks[slot_id_1]
+          var team_b= this.state.picks[slot_id_2]
+          if (leadInMatchIds[0] > 63) {
+              team_a = leadInMatchIds[0] - 63
+              team_b = leadInMatchIds[1] - 63
+          }
+          console.log({pick: i,
+              slotplus: Helpers.getSlotId(match_id),
+              team: this.state.picks[i],
+              leadInMatches: leadInMatchIds,
+              slot1:leadInMatchIds[0]-1,
+              slot1_pick:team_a,
+              slot2:leadInMatchIds[1]-1,
+              slot2_pick:team_b,
+          })
+
+         if(this.state.picks[i] !== team_a && this.state.picks[i] !== team_b) {
+                console.log('bad')
+             var picks = this.state.picks.slice();
+             picks[i] = null;
+             this.setState({picks: picks});
+             return false
+          }
+
       }
+      return true;
   }
 
   validateBracket = () => {
     var errors = {};
     var hasAllSelections = !this.state.picks.some((val) => {return val === null});
+    hasAllSelections = this.validatePicks();
     var hasName = this.state.name && this.state.name.trim() !== '';
     console.log(hasAllSelections, hasName, this.state.final_points )
-    var isValid =   hasName && hasAllSelections && this.state.final_points;
     errors['name'] = !hasName;
     errors['picks'] = !hasAllSelections;
     errors['final_points'] = this.state.final_points<1;
-    var errored = Object.values(errors).filter( errored => errored == true ).length > 0
+    var errored = Object.values(errors).filter( errored => errored === true ).length > 0
     this.setState({error: errored, errors: errors})
 
     return !errored
@@ -92,14 +127,15 @@ class Bracket extends Component {
         (data) => {
           console.log(data)
           if (data.error) {
-              this.setState({canEdit:true, flash_message: {message:'Failed to save Bracket', type:'error'}})
+              this.setState({canEdit:true, flash_message: {message:'Failed to save Bracket: ' + data.msg, type:'error'}})
           } else {
               this.setState({canEdit:true, flash_message: {message:'Bracket Saved', type:'success'}})
               this.setState(data.bracket)
 
           }
         }
-      ) .catch(error => {
+      ).catch(error => {
+          console.log(error);
             this.setState({canEdit:true, flash_message: {message:'Failed to save Bracket', type:'error'}})
 
     });
@@ -119,8 +155,20 @@ class Bracket extends Component {
     return nextMatch;
   }
 
+  getPreviousPicks(pick_index) {
+      var match_id = pick_index+1
+      var round = Math.floor(Math.log2(match_id));
+      console.log('getPreviousPicks',{round: round,
+      leadIns: this.getLeadInMatches(match_id),
+      pick_a: this.getNextMatch(this.getLeadInMatches(match_id)[0]),
+          pick_b: this.getNextMatch(this.getLeadInMatches(match_id)[1])
+      })
+
+}
+
   // Given a match id, get the twp previous match ids leading into this matchup
   getLeadInMatches(match_id) {
+      console.log("match",match_id)
     var round = Math.floor(Math.log2(match_id));
     var offset = 2**round;
     var bar =  (match_id%offset)* 2 ;

@@ -50,7 +50,7 @@ class Team extends Component {
   }
   renderLogo(){
     if (this.teamHasBeenPicked()) {
-      return <img src={"/images/logos/" + this.getSlug() + ".svg"}/>
+      return <img alt={this.getSlug()}src={"/images/logos/" + this.getSlug() + ".svg"}/>
     }
   }
   render() {

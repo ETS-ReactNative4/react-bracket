@@ -1,21 +1,17 @@
 import React, { Component }  from 'react';
 
 class BracketForm extends Component {
-  constructor(props){
-    super(props);
-  }
-
   renderButton() {
     if (this.props.bracket.canEdit) {
       return <button onClick={() => this.props.onSubmit()} disabled={this.props.isValid}> Submit</button>
     }
   }
+
   renderError() {
     if (this.props.bracket.error) {
       return <div className="error"> Please complete all required fields</div>
     }
   }
-
 
   render() {
     var errored = this.props.bracket.errors.name ? 'errored' : ''
