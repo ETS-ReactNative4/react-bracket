@@ -3,7 +3,6 @@ import Region from './Region.js'
 import Matchup from './Matchup.js'
 import BracketForm from './BracketForm.js'
 
-import Helpers from './Helpers.js'
 
 import FlashMessage from './FlashMessage.js'
 import Team from './Team.js'
@@ -77,7 +76,6 @@ class Bracket extends Component {
               team_b = leadInMatchIds[1] - 63
           }
           console.log({pick: i,
-              slotplus: Helpers.getSlotId(match_id),
               team: this.state.picks[i],
               leadInMatches: leadInMatchIds,
               slot1:leadInMatchIds[0]-1,
@@ -130,8 +128,7 @@ class Bracket extends Component {
               this.setState({canEdit:true, flash_message: {message:'Failed to save Bracket: ' + data.msg, type:'error'}})
           } else {
               this.setState({canEdit:true, flash_message: {message:'Bracket Saved', type:'success'}})
-              this.setState(data.bracket)
-
+              this.setState(data)
           }
         }
       ).catch(error => {
