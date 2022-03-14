@@ -39,10 +39,11 @@ class Team extends Component {
 
   handleClick = () => {
     console.log("teamPicked",
-      this.props.pick,
-      this.state.team_id,
-      this.props.match_id
-       )
+    {
+      pick: this.props.pick,
+      team_id: this.state.team_id,
+      match_id: this.props.match_id
+    })
     var teamPicked = this.getTeamId()
     if (teamPicked && this.props.teamClicked) {
       this.props.teamClicked(this.props.match_id, teamPicked);
